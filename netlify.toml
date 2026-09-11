@@ -1,0 +1,20 @@
+[build]
+  base = "."
+  command = "npm run build"
+  publish = "frontend/dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+  VITE_MAX_UPLOAD_MB = "4"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["express", "xlsx", "serverless-http", "@netlify/blobs"]
+  included_files = ["backend/src/services/excelWorker.js", "backend/src/services/excelImport.js"]
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+const maxUploadMB = Number(import.meta.env.VITE_MAX_UPLOAD_MB) || 15;
 const fields = {
   name: 'Descripción *',
   price: 'Precio *',
@@ -65,7 +66,7 @@ export default function ExcelImporter({ provider, onDone, onCancel, onBusyChange
     <section className="importer" aria-label={`Importar lista de ${provider.name}`}>
       <h2>Lista de precios · {provider.name}</h2>
       <p>Seleccioná el archivo y revisá los datos antes de importar.</p>
-      <label htmlFor="excel-file">Archivo Excel (.xlsx o .xls, máximo 15 MB)</label>
+      <label htmlFor="excel-file">Archivo Excel (.xlsx o .xls, máximo {maxUploadMB} MB)</label>
       <input
         id="excel-file"
         type="file"
@@ -78,8 +79,8 @@ export default function ExcelImporter({ provider, onDone, onCancel, onBusyChange
           setSettings({});
           setAccept(false);
           if (f) {
-            if (f.size > 15 * 1024 * 1024) {
-              setError('El archivo supera 15 MB.');
+            if (f.size > maxUploadMB * 1024 * 1024) {
+              setError(`El archivo supera ${maxUploadMB} MB.`);
               return;
             }
             inspect(false, f, {});

@@ -2,6 +2,7 @@ import { readFile, mkdir, writeFile, rename, unlink } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { providerStore } from './providerStore.js';
+import { createCloudCatalogStore } from './cloudStore.js';
 export const initialProviders = [
   { id: 'macons', name: 'Macons', url: 'https://macons.com.ar' },
   { id: 'berger', name: 'Berger', url: 'https://www.rodolfoberger.com.ar' },
@@ -43,7 +44,8 @@ export function createCatalogStore(
     },
   };
 }
-export const catalogStore = createCatalogStore();
+export const catalogStore =
+  process.env.COMPARADOR_STORAGE === 'netlify' ? createCloudCatalogStore() : createCatalogStore();
 export async function allProviders() {
   return [...initialProviders, ...(await providerStore.list())];
 }

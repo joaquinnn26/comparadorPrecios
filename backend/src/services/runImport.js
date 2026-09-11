@@ -1,7 +1,12 @@
 import { Worker } from 'node:worker_threads';
+import { resolve } from 'node:path';
 export function runImport(buffer, settings) {
   return new Promise((resolve, reject) => {
-    const worker = new Worker(new URL('./excelWorker.js', import.meta.url), {
+    const workerPath =
+      process.env.COMPARADOR_STORAGE === 'netlify'
+        ? resolve('backend/src/services/excelWorker.js')
+        : new URL('./excelWorker.js', import.meta.url);
+    const worker = new Worker(workerPath, {
       workerData: { buffer, settings },
       resourceLimits: { maxOldGenerationSizeMb: 256 },
     });

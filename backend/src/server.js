@@ -23,7 +23,10 @@ app.get('/api/providers', async (_req, res) => {
 let importing = false;
 app.post(
   '/api/providers/:id/import',
-  express.raw({ type: 'application/octet-stream', limit: '15mb' }),
+  express.raw({
+    type: 'application/octet-stream',
+    limit: process.env.COMPARADOR_STORAGE === 'netlify' ? '4mb' : '15mb',
+  }),
   async (req, res) => {
     if (importing)
       return res.status(429).json({ error: 'Hay una importación en curso. Esperá a que termine.' });
@@ -103,7 +106,8 @@ app.use((error, _req, res, _next) =>
         : 'La solicitud no es válida.',
   }),
 );
-app.use(express.static(fileURLToPath(new URL('../../frontend/dist/', import.meta.url))));
+if (process.env.COMPARADOR_STORAGE !== 'netlify')
+  app.use(express.static(fileURLToPath(new URL('../../frontend/dist/', import.meta.url))));
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url))
   app.listen(
     Number(process.env.PORT) || 3001,

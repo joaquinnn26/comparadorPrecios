@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { createCloudProviderStore } from './cloudStore.js';
 
 const builtins = ['macons', 'berger', 'lekons'];
 const builtinHosts = ['macons.com.ar', 'rodolfoberger.com.ar', 'lekons.com.ar'];
@@ -69,4 +70,7 @@ export function createProviderStore(
     },
   };
 }
-export const providerStore = createProviderStore();
+export const providerStore =
+  process.env.COMPARADOR_STORAGE === 'netlify'
+    ? createCloudProviderStore(validateProvider)
+    : createProviderStore();
