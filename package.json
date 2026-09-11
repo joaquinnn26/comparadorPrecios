@@ -1,0 +1,22 @@
+{
+  "name": "comparador-ferreteria",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "start:lan": "npm run start:lan -w backend",
+    "dev": "concurrently -k \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "test": "npm test -w backend",
+    "build": "npm run build -w frontend",
+    "start": "npm start -w backend",
+    "format": "prettier --write \"frontend/src/**/*.{js,jsx,css}\" \"backend/src/**/*.js\" \"shared/*.js\"",
+    "format:check": "prettier --check \"frontend/src/**/*.{js,jsx,css}\" \"backend/src/**/*.js\" \"shared/*.js\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "prettier": "^3.9.6"
+  }
+}

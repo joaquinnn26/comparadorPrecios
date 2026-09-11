@@ -1,0 +1,14 @@
+node_modules/
+backend/local-data/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+*storage-state*.json
+.sessions/
+macons-inspect.html
+*-inspect.html
+*-inspect.js
+*-search.html
+*-empty.html
